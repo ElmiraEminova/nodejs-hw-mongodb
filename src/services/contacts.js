@@ -10,8 +10,8 @@ export const getContactById = async (Id) => {
     return contacts;
 };
 
-export const createContact = payload => {
-    ContactsCollection.create(payload);
+export const createContact =async(payload)  => {
+   return await ContactsCollection.create(payload);
 };
 
 export const updateContact = async (filter, data, options = {}) => {
