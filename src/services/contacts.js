@@ -14,18 +14,17 @@ export const createContact =async(payload)  => {
    return await ContactsCollection.create(payload);
 };
 
-export const updateContact = async (filter, data, options = {}) => {
+export const updateContact = async(filter, data, options = {}) =>{
     const rawResult = await ContactsCollection.findOneAndUpdate(filter, data, {
         new: true,
         includeResultMetadata: true,
-        ...options
+        ...options,
     });
 
-    if (!rawResult && !rawResult.value) return null;
-
+    if (!rawResult || !rawResult.value) return null;
     return {
         data: rawResult.value,
-        isNew: Boolean(rawResult.lastErrorObject?.upserted),
+        isNew: Boolean(rawResult?.lastErrorObject?.upserted)
     };
 };
 
