@@ -2,10 +2,15 @@ import { SORT_ORDER } from "../constans/constans.js";
 import ContactsCollection from "../db/Contacts.js";
 import calculatePaginationData from "../utils/calculatePaginationData.js";
 
-export const getContacts = async ({ perPage, page, sortBy = "_id", sortOrder = SORT_ORDER }) => {
+export const getContacts = async ({ perPage, page, sortBy = "_id", sortOrder = SORT_ORDER, filter={} }) => {
     const skip = (page - 1) * perPage;
-    const data = await ContactsCollection.find().skip(skip).limit(perPage).sort({ [sortBy]: sortOrder});
-    const count = await ContactsCollection.find().countDocuments();
+    const contactQuery = ContactsCollection.find();
+
+    if (filter.userId) {
+        contactQuery.where("userId").equals(filter.userId);
+    }
+    const data = await contactQuery.skip(skip).limit(perPage).sort({ [sortBy]: sortOrder});
+    const count = await ContactsCollection.find().merge(contactQuery).countDocuments();
     const paginationData = calculatePaginationData({count, perPage, page});
 
     return {
@@ -17,10 +22,7 @@ export const getContacts = async ({ perPage, page, sortBy = "_id", sortOrder = S
     };
 };
 
-export const getContactById = async (Id) => {
-    const contacts = await ContactsCollection.findById(Id);
-    return contacts;
-};
+export const getContact = filter => ContactsCollection.findById(filter);
 
 export const createContact =async(payload)  => {
    return await ContactsCollection.create(payload);
