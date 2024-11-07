@@ -12,7 +12,7 @@ export const getAllContactsController = async (req, res) => {
 
     const { _id: userId } = req.user;
 
-    const data = await contactServices.getContacts({perPage, page, sortBy, sortOrder, filter: userId});
+    const data = await contactServices.getContacts({ perPage, page, sortBy, sortOrder, filter: { userId } });
 
         res.status(200).json({
              status: 200,

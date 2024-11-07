@@ -22,7 +22,7 @@ export const getContacts = async ({ perPage, page, sortBy = "_id", sortOrder = S
     };
 };
 
-export const getContact = filter => ContactsCollection.findById(filter);
+export const getContact = filter => ContactsCollection.findOne(filter);
 
 export const createContact =async(payload)  => {
    return await ContactsCollection.create(payload);
