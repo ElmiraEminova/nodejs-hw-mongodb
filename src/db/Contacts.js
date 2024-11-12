@@ -11,6 +11,10 @@ const contactSchema = new Schema({
         type: String,
         required: true,
     },
+    photo: {
+        type: String,
+        default: null,
+    },
     email: {
       type: String,
       required: false,

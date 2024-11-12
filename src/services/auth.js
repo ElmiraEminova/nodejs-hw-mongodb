@@ -1,9 +1,19 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import handlebars from 'handlebars';
 import { randomBytes } from "crypto";
 import userCollection from "../db/Users.js";
 import SessionCollection from "../db/Session.js";
 import { accessTokenLifeTime, refreshTokenLifeTime } from "../constans/users.js";
+import { sendMail } from "../utils/sendMail.js";
+
+const RESET_PASSWORD_TEMPLATE = fs.readFileSync(
+  path.resolve('src/templates/reset-password.hbs'),
+  { encoding: 'utf-8' },
+);
 
 const createSession = ()=> {
     const accessToken = randomBytes(30).toString("base64");
@@ -89,3 +99,62 @@ export const signout = async (sessionId)=> {
 };
 
 export const findUser = filter => userCollection.findOne(filter);
+
+
+export const sendResetEmail = async(email) => {
+
+    const user = await userCollection.findOne({ email });
+
+    if (user === null) {
+        throw createHttpError(404, 'User not found');
+    };
+
+    const resetToken = jwt.sign(
+    { sub: user._id, email: user.email },
+    process.env.JWT_SECRET,
+    { expiresIn: '5m' },
+    );
+
+    const html = handlebars.compile(RESET_PASSWORD_TEMPLATE);
+    const appHost = process.env.APP_DOMAIN;
+
+      try {
+    await sendMail({
+      from: 'asanovaelis@gmail.com',
+      to: email,
+      subject: 'Reset your password',
+      html: html({ resetToken, appHost }),
+    });
+  } catch (error) {
+    console.error(error);
+
+    throw createHttpError(500, "Failed to send the email, please try again later.");
+  }
+};
+
+export async function resetPassword(password, token) {
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await userCollection.findOne({ _id: decoded.sub, email: decoded.email });
+
+    if (user === null) {
+      throw createHttpError(404, 'User not found');
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await userCollection.findByIdAndUpdate(user._id, { password: hashedPassword });
+  } catch (error) {
+    if (
+      error.name === 'JsonWebTokenError' ||
+      error.name === 'TokenExpiredError'
+    ) {
+      throw createHttpError(401, 'Token is expired or invalid.');
+    }
+
+    throw error;
+  }
+}
+
+
