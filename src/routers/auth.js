@@ -10,7 +10,7 @@ authRouter.post("/login", validateBody(userSignInSchema), ctrlWrapper(signinCont
 authRouter.post("/refresh", ctrlWrapper(refreshController));
 authRouter.post("/logout", ctrlWrapper(signoutController));
 authRouter.post("/send-reset-email", validateBody(sendResetEmailSchema), ctrlWrapper(sendResetEmailController));
-authRouter.post("/reset-password", validateBody(resetPasswordSchema), ctrlWrapper(resetPasswordController),
+authRouter.post("/reset-pwd", validateBody(resetPasswordSchema), ctrlWrapper(resetPasswordController),
 );
 
 export default authRouter;

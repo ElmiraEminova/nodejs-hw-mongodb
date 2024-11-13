@@ -34,11 +34,7 @@ export const updateContact = async(filter, data, options = {}) =>{
         ...options,
     });
 
-    if (!rawResult || !rawResult.value) return null;
-    return {
-        data: rawResult.value,
-        isNew: Boolean(rawResult?.lastErrorObject?.upserted)
-    };
+   return rawResult ? rawResult.value : null;
 };
 
 export const deleteContact = filter => ContactsCollection.findOneAndDelete(filter);
