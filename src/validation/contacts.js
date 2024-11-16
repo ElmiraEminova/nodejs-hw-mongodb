@@ -1,20 +1,22 @@
-import Joi from "joi";
+import Joi from 'joi';
 
 const typeList = ['work', 'home', 'personal'];
 
 export const contactAddSchema = Joi.object({
-    name: Joi.string().min(3).max(20).required(),
-    phoneNumber: Joi.string().min(3).max(20).required(),
-    email: Joi.string().email().min(3).max(20),
-    isFavourite: Joi.boolean(),
-    contactType: Joi.string().valid(...typeList).required()
+  name: Joi.string().min(3).max(20).required(),
+  phoneNumber: Joi.string().min(3).max(20).required(),
+  email: Joi.string().email().min(3).max(20),
+  isFavourite: Joi.boolean(),
+  contactType: Joi.string()
+    .valid(...typeList)
+    .required(),
 });
 
 export const patchSchema = Joi.object({
-    name: Joi.string().min(3).max(20),
-    phoneNumber: Joi.string().min(3).max(20),
-    email: Joi.string().min(3).max(20),
-    isFavourite: Joi.boolean(),
-    contactType: Joi.string().valid(...typeList)
+  name: Joi.string().min(3).max(20),
+  phoneNumber: Joi.string().min(3).max(20),
+  email: Joi.string().min(3).max(20),
+  isFavourite: Joi.boolean(),
+  contactType: Joi.string().valid(...typeList),
+  photo: Joi.string().uri(),
 });
-
