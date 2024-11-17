@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "http://127.0.0.1:4000"
+      "url": "https://nodejs-hw-mongodb-swagger-3af4.onrender.com"
     }
   ],
   "tags": [
@@ -411,7 +411,7 @@
                     "example": "kely@example.com"
                   },
                   "isFavourite": {
-                    "description": "Whether the contact is a favorite",
+                    "description": "Is contact a favorite",
                     "type": "boolean",
                     "example": false
                   },
@@ -428,6 +428,7 @@
                   "photo": {
                     "description": "Contact's photo as a binary file",
                     "type": "string",
+                    "default": null,
                     "format": "binary"
                   }
                 }
@@ -518,7 +519,6 @@
           "_id",
           "name",
           "phoneNumber",
-          "email",
           "contactType",
           "userId"
         ],
