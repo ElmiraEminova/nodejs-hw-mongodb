@@ -29,7 +29,7 @@ parameters:
     name: sortBy
     schema:
       type: string
-    example: 'age'
+    example: 'name'
     description: 'Field to sort the contacts. Default value is _id.'
 
 responses:
