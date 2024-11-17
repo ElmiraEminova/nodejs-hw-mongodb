@@ -78,27 +78,6 @@
             },
             "example": "age",
             "description": "Field to sort the contacts. Default value is _id."
-          },
-          {
-            "in": "query",
-            "name": "contactType",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "work",
-                "personal",
-                "home"
-              ]
-            },
-            "example": "personal"
-          },
-          {
-            "in": "query",
-            "name": "isFavourite",
-            "schema": {
-              "type": "boolean"
-            },
-            "example": false
           }
         ],
         "responses": {
